@@ -1,0 +1,222 @@
+      static void Main(string[] args)
+        {
+            try
+            {
+
+                StreamWriter streamWriter = new StreamWriter("project.txt");
+                List<Employees> employees = new List<Employees>();
+                int n = int.Parse(Console.ReadLine());
+                for (int i = 0; i < n; i++)
+                {
+                    var danni = Console.ReadLine().Split();
+                    Employees emp = new Employees(danni[0], danni[1], int.Parse(danni[2]), danni[3], danni[4]);
+                    AirPort pas = new Pasanger(danni[0], int.Parse(danni[1]), int.Parse(danni[2]), int.Parse(danni[3]), danni[4], danni[5]);
+                    employees.Add(emp);
+                    using (streamWriter)
+                    {
+                        streamWriter.Write(danni[0]);
+                        streamWriter.Write(danni[1]);
+                        streamWriter.Write(danni[2]);
+                        streamWriter.Write(danni[3]);
+                    }
+                }
+                employees.Sort();
+                Console.WriteLine(employees.Select(x => x.Age).Min());
+                Console.WriteLine(employees.Select(x => x.Age).Max());
+                employees.ForEach(x => x.PrintInfo());
+            }
+            catch(ArgumentException ex) 
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch(StackOverflowException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            StreamReader reader = new StreamReader("project.txt");
+            reader.Close();
+
+
+    public class Employees:AirPort
+    {
+        private string name;
+        private string position;
+        private int age;
+
+        public Employees(string name, string position, int age, string airPortName,string adress):base(airPortName,adress)
+        {
+            this.Name = name;
+            this.Position = position;
+            this.Age = age; 
+        }
+        public string Name
+        {
+            get { return name; } 
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentException("Name cannot be an empty string!");
+                }
+                this.name= value;   
+            }
+        }
+        public string Position
+        {
+            get { return position; }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentException("Position cannot be an empty string!");
+                }
+                this.name = value;
+            }
+        }
+        public int Age
+        {
+            get { return this.Age; }
+            set { this.Age = value; }
+        }
+        public override string PrintInfo()
+        {
+            return $"Employee {this.Name} is on {this.Position} position and is {this.Age} years old.";
+           // return base.PrintInfo();
+        }
+
+
+ public class Pasanger:AirPort,IPrice
+    {
+        private string nameP;
+        private int age;
+        private int data;
+        private int flighCode;
+
+        public Pasanger(string nameP, int age, int data, int flighCode, string airPortname, string adress):base(airPortname,adress)
+        {
+            NameP = nameP;
+            Age = age;
+            Data = data;
+            FlighCode = flighCode;
+        }
+    
+        public string NameP
+        {
+            get { return nameP; }
+            set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentException("Name cannot be an empty string!");
+                }
+                this.nameP = value;
+            }
+        }
+        public int Age
+        {
+            get { return age; }
+            set
+            {
+                if (age < 0||age>120)
+                {
+                    throw new ArgumentException("EGN cannot be an empty string!");
+                }
+                this.age = value;
+            }
+        }
+        public int Data
+        {
+            get { return data; }
+            set
+            {
+                if (data>31)
+                {
+                    throw new ArgumentException("Data cannot be higher that 31");
+                }
+                this.data = value;
+            }
+        }
+        public int FlighCode
+        {
+            get { return flighCode; }
+            set
+            {
+                if (flighCode>100000)
+                {
+                    throw new ArgumentException("Enter valid code!");
+                }
+                this.flighCode = value;
+            }
+        }
+
+        public void ISumPrice()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string PrintInfo()
+        {
+            return $"Passenger: {this.NameP}, egn: {this.Age}, will fly on {this.Data}. Code: {this.FlighCode}";
+           // return base.PrintInfo();
+        }
+
+
+ public class Fly:AirPort
+    {
+        private int freeSeats;
+        private int notFreeSeats;
+        public Fly(int freeSeats, int notFreeSeats, string airPortName, string adress):base(airPortName,adress)
+        {
+            FreeSeats = freeSeats;
+            NotFreeSeats = notFreeSeats;
+        }
+    
+        public int FreeSeats
+        {
+            get { return this.FreeSeats; }
+            set 
+            {
+                if (freeSeats>500)
+                {
+                    throw new ArgumentException("Enter valid number");
+                }
+                this.FreeSeats = value; 
+            }
+        }
+        public int NotFreeSeats
+        {
+            get { return this.NotFreeSeats; }
+            set
+            {
+                if (notFreeSeats > 500)
+                {
+                    throw new ArgumentException("Enter valid number");
+                }
+                this.NotFreeSeats = value;
+            }
+        }
+    }
+
+
+  public abstract class AirPort
+    {
+        protected string airPortName;
+        protected string adress;
+        public AirPort(string airPortName,string adress)
+        {
+            this.airPortName = airPortName;
+            this.adress = adress;
+        }
+
+        public virtual string PrintInfo()
+        {
+            return $"Airport {this.airPortName} is placed in {this.adress}";
+        }
+    }
+
+
+   public interface IPrice
+    {
+        void ISumPrice();
+    }
