@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,43 +14,67 @@ namespace AirportProject
         static void Main(string[] args)
         {
             StreamWriter streamWriter = new StreamWriter("project.txt");
-            List<Employees> employees = new List<Employees>();
-            for (int i = 0; i < 1; i++)
+            Console.WriteLine("enter count");
+            int count = int.Parse(Console.ReadLine());
+            string operation;
+            do
             {
-                var danni = Console.ReadLine().Split();
-                Employees emp = new Employees(danni[0], danni[1], int.Parse(danni[2]), danni[3], danni[4]);
-                employees.Add(emp);
-                using (streamWriter)
+                operation = Console.ReadLine();
+                switch (operation)
                 {
-                    streamWriter.Write(danni[0]);
-                    streamWriter.Write(danni[1]);
-                    streamWriter.Write(danni[2]);
-                    streamWriter.Write(danni[3]);
+                    case "employees":
+                        Console.WriteLine("enter emp");
+                        List<Employees> employees = new List<Employees>();
+                        for (int i = 0; i < count; i++)
+                        {
+                            var dann = Console.ReadLine().Split();
+                            Employees emp = new Employees(dann[0], dann[1], int.Parse(dann[2]), dann[3], dann[4]);
+                            employees.Add(emp);
+                            using (streamWriter)
+                            {
+                                streamWriter.Write(dann[0]);
+                                streamWriter.Write(dann[1]);
+                                streamWriter.Write(dann[2]);
+                                streamWriter.Write(dann[3]);
+                            }
+                        }
+                        employees.ForEach(x => x.PrintInfo());
+                        break;
+                    case "pasanger":
+                        Console.WriteLine("enter pass");
+                        List<Pasanger> p = new List<Pasanger>();
+                        var danni = Console.ReadLine().Split();
+                        Pasanger pas = new Pasanger(danni[0], danni[1], int.Parse(danni[2]), int.Parse(danni[3]), danni[4], danni[5]);
+                        p.Add(pas);
+                        using (streamWriter)
+                        {
+                            streamWriter.Write(danni[0]);
+                            streamWriter.Write(danni[1]);
+                            streamWriter.Write(danni[2]);
+                            streamWriter.Write(danni[3]);
+                        }
+                        p.ForEach(x => x.PrintInfo());
+                        break;
+                        case "fly":
+                        Console.WriteLine("enter fly");
+                        List<Fly> f = new List<Fly>();
+                        var dannis = Console.ReadLine().Split();
+                        Fly fly = new Fly(int.Parse(dannis[0]), int.Parse(dannis[1]), dannis[2], dannis[3]);
+                        f.Add(fly);
+                        using (streamWriter)
+                        {
+                            streamWriter.Write(dannis[0]);
+                            streamWriter.Write(dannis[1]);
+                            streamWriter.Write(dannis[2]);
+                            streamWriter.Write(dannis[3]);
+                        }
+                        f.ForEach(x => x.PrintInfo());
+                        break;
                 }
-            }
-            StreamReader reader = new StreamReader("project.txt");
-            reader.Close();
-
-
-            //AirPort a1 = new Employees("Ivan Ivanov", "Sanitar", 34, "Sofiq Terminal 1", "Ivanvazovsko");
-            //AirPort a2 = new Employees("Martin Marinov", "Pilot", 55, "Varna Terminal 2", "Stambolisko");
-            //AirPort a3 = new Employees("Ivanka Stoyanova", "Stuardesa", 26, "Plovdiv Terminal 2", "Lozovsko");
-            //AirPort a4 = new Pasanger("Mariyan", "09876532", 22, 45678, "Sofiq Terminal 1", "Ivanvazovsko");
-            //AirPort a5 = new Pasanger("Mariyana", "08624523", 13, 87123, "Varna Terminal 2", "Stamboliisko");
-
-            //AirPort a6 = new Fly(89, 411, "Plovdiv Terminal 2", "Lozovsko");
-            //AirPort a7 = new Fly(67, 430, "Varna Terminal 2", "Stamboliisko");
-
-            //a1.PrintInfo();
-            //a2.PrintInfo();
-            //a3.PrintInfo();
-            //a4.PrintInfo();
-            //a5.PrintInfo();
-            //a6.PrintInfo();
-            //a7.PrintInfo();
-
-
-
+            } while (operation != "employees" || operation != "fly" || operation != "pasanger");
+        StreamReader reader = new StreamReader("project.txt");
+        reader.Close();
+        
         }
     }
 }

@@ -45,14 +45,14 @@ namespace AirportProject
         }
         public int Age
         {
-            get { return this.Age; }
+            get { return this.age; }
             set
             {
                 if (Age < 0 || Age > 120)
                 {
                     throw new ArgumentOutOfRangeException("Enter valid number for age!");
                 }
-                this.Age = value;
+                this.age = value;
             }
         }
         public override string PrintInfo()
